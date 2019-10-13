@@ -27,7 +27,7 @@ def readSqliteTable():
 def Diff(li1, li2):
 	return (list(set(li1) - set(li2)))
 
-print("Wait till we do the processing")
+print("Please wait till we process the request.. \n")
 currentSongs = []
 existingSongs = readSqliteTable()
 
