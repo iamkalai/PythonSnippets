@@ -4,9 +4,9 @@ import sqlite3
 
 url = "https://www.youtube.com/watch?v=f7UpNvsy8G8&list=PLOuq5xjfqtWKvFoAa68WdWMeUiAOmO_Fb"
 sqlite_insert_query = """INSERT INTO `videos` ('title', 'url', 'type') VALUES (? , ? , ?);"""
-
+sqlite_delete_query = """DELETE from videos"""
 try:
-
+    print("Please wait till we process the request.. \n")
     r = requests.get(url)
 
     soup = bs.BeautifulSoup(r.content, 'html.parser')
@@ -14,14 +14,13 @@ try:
 
     sqliteConnection = sqlite3.connect('Youtube')
     cursor = sqliteConnection.cursor()
-    print("Successfully Connected to SQLite")
-
+    cursor.execute(sqlite_delete_query)
     for song in songs.find_all('li'):
         data_tuple = (song.div.h4.text.strip(), song.a['href'], 'Songs')
         count = cursor.execute(sqlite_insert_query, data_tuple)
 
     sqliteConnection.commit()
-    print("Record inserted successfully into SqliteDb_developers table ", cursor.rowcount)
+    print("YouTube playlist loaded successfully")
     cursor.close()
 
 except sqlite3.Error as error:
@@ -29,5 +28,4 @@ except sqlite3.Error as error:
 finally:
     if (sqliteConnection):
         sqliteConnection.close()
-        print("The SQLite connection is closed")
 
